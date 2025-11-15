@@ -1,59 +1,436 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNAPI Pro</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #111827;
-            color: white;
-            text-align: center;
-            padding: 40px;
-        }
-        header {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .card {
-            background: #1f2937;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 600px;
-            margin: auto;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-        }
-        a.button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 20px;
-            background: #3b82f6;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        a.button:hover {
-            background: #2563eb;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNAPI Pro</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #111827;
+      --accent: #1f7aed;
+      --accent-soft: rgba(31, 122, 237, 0.15);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* Top bar */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 25% 25%, #38bdf8, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: white;
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    /* Hero card */
+    .hero-card {
+      background: radial-gradient(circle at top left, #1f2937, #020617);
+      border-radius: 20px;
+      padding: 32px 24px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 18px 60px rgba(15, 23, 42, 0.9);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      margin: 0 0 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 16px;
+    }
+
+    .hero-line {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .hero-line strong {
+      color: var(--text-main);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #bbf7d0;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #4f46e5);
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 16px 35px rgba(37, 99, 235, 0.6);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-size: 14px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    /* Sections grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1.1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 18px;
+      padding: 20px 18px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .step-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .list li::before {
+      content: "• ";
+      color: var(--accent);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+    }
+
+    footer a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .hero-card {
+        padding: 24px 18px;
+      }
+
+      .hero-title {
+        font-size: 26px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>SNAPI Pro</header>
+  <div class="page">
+    <header class="nav">
+      <div class="logo">
+        <div class="logo-mark">S</div>
+        <span>SNAPI PRO</span>
+      </div>
+      <div class="badge">Smart call &amp; text handling</div>
+    </header>
 
-    <div class="card">
-        <h2>Smart Call & Text Handling for Small Businesses</h2>
-        <p>SNAPI Pro automatically answers calls, captures voicemails, sends text confirmations, and notifies business owners instantly.</p>
+    <main>
+      <!-- Hero -->
+      <section class="hero-card">
+        <div class="pill">
+          <div class="pill-dot"></div>
+          <span>Your SNAPI Pro line is active: <strong>+1 (833) 987-7099</strong></span>
+        </div>
 
-        <p><strong>Your line is active:</strong> +1 (833) 987-7099</p>
+        <h1 class="hero-title">Smart Call &amp; Text Handling for Small Businesses</h1>
+        <p class="hero-subtitle">
+          SNAPI Pro automatically answers calls, captures voicemails, sends text confirmations,
+          and notifies you instantly so you never miss an important customer.
+        </p>
+        <p class="hero-line">
+          <strong>Designed for busy owners</strong> who need a simple “always-on” receptionist.
+        </p>
 
-        <a class="button" href="https://call-intercept.onrender.com" target="_blank">
-            Manage Call System
-        </a>
-    </div>
+        <div class="hero-actions">
+          <a href="tel:+18339877099" class="btn-primary">
+            Call Your SNAPI Pro Line
+          </a>
+          <a href="#contact" class="btn-secondary">
+            <span class="dot"></span>
+            Talk about setting this up for you
+          </a>
+        </div>
+      </section>
 
+      <!-- Content grid -->
+      <section class="grid">
+        <!-- How it works -->
+        <article class="card">
+          <h2>How SNAPI Pro Works</h2>
+          <p>A simple, automated flow that makes sure every caller is heard.</p>
+          <ul class="steps">
+            <li class="step">
+              <div class="step-badge">1</div>
+              <div>
+                <div class="step-title">Customer calls your SNAPI Pro number</div>
+                <div class="step-text">
+                  Your toll-free line greets callers with a friendly message and simple options.
+                </div>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-badge">2</div>
+              <div>
+                <div class="step-title">SNAPI Pro captures the details</div>
+                <div class="step-text">
+                  The system records their name, reason for calling, and message by voice or text.
+                </div>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-badge">3</div>
+              <div>
+                <div class="step-title">You get notified instantly</div>
+                <div class="step-text">
+                  SNAPI Pro can text or email you a summary, so you can follow up when you’re free.
+                </div>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Benefits -->
+        <article class="card">
+          <h2>Why Owners Love It</h2>
+          <ul class="list">
+            <li>Never miss another call while you’re with customers or out of the office.</li>
+            <li>Professional, consistent greeting every time.</li>
+            <li>Quick snapshot of who called and why.</li>
+            <li>No complicated menus or apps for your callers.</li>
+            <li>Built to be simple to use and easy to improve over time.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- Second row -->
+      <section class="grid">
+        <!-- Who it's for -->
+        <article class="card">
+          <h2>Who SNAPI Pro Is For</h2>
+          <p>Perfect for small, service-based businesses, including:</p>
+          <ul class="list">
+            <li>Home services (HVAC, plumbing, electrical, cleaning).</li>
+            <li>Real estate agents and property managers.</li>
+            <li>Health &amp; wellness (massage, coaching, personal training).</li>
+            <li>Any busy owner who can’t always pick up the phone.</li>
+          </ul>
+        </article>
+
+        <!-- Simple pricing (placeholder) -->
+        <article class="card">
+          <h2>Simple, Transparent Setup</h2>
+          <p>
+            SNAPI Pro is currently in an early access phase. We’re working closely with a small
+            group of business owners to refine the system.
+          </p>
+          <p class="step-text">
+            If you’d like to be considered for early access or talk about pricing, reach out using
+            the contact details below.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer id="contact">
+      <div>
+        &copy; <span id="year"></span> SNAPI Technologies LLC. All rights reserved.
+      </div>
+      <div>
+        Contact: <a href="mailto:hans.leonhardt@gmail.com">hans.leonhardt@gmail.com</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Auto-set current year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
