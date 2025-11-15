@@ -3,16 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SNAPI Pro</title>
+  <title>SNAPI Pro – Smart Call & Text Handling</title>
+
   <style>
     :root {
-      --bg: #0b1220;
-      --card: #111827;
-      --accent: #1f7aed;
-      --accent-soft: rgba(31, 122, 237, 0.15);
+      --bg: #111827;
+      --bg-soft: rgba(15, 23, 42, 0.95);
+      --card: #1f2937;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, 0.15);
+      --accent-green: #22c55e;
+      --accent-orange: #f97316;
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-      --border-subtle: #1f2937;
+      --border-subtle: rgba(148, 163, 184, 0.25);
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.75);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
     }
 
     * {
@@ -24,251 +31,356 @@
       min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
       color: var(--text-main);
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      padding: 32px 16px;
+      padding: 32px 16px 40px;
     }
 
-    .page {
+    .page-wrapper {
       width: 100%;
-      max-width: 960px;
+      max-width: 980px;
     }
 
-    /* Top bar */
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .logo-mark {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 25% 25%, #38bdf8, #1d4ed8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: white;
-      box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
-    }
-
-    .badge {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-    }
-
-    /* Hero card */
-    .hero-card {
-      background: radial-gradient(circle at top left, #1f2937, #020617);
-      border-radius: 20px;
-      padding: 32px 24px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 18px 60px rgba(15, 23, 42, 0.9);
+    header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    .hero-title {
-      font-size: 32px;
-      margin: 0 0 8px;
-    }
-
-    .hero-subtitle {
-      font-size: 16px;
-      color: var(--text-muted);
-      max-width: 540px;
-      margin: 0 auto 16px;
-    }
-
-    .hero-line {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-
-    .hero-line strong {
-      color: var(--text-main);
-    }
-
-    .pill {
+    .logo-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.4);
-      color: #bbf7d0;
-      font-size: 13px;
-      margin-bottom: 16px;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-muted);
     }
 
-    .pill-dot {
+    .logo-dot {
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+      background: var(--accent);
+    }
+
+    .brand {
+      margin-top: 10px;
+      font-size: 20px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero {
+      margin-top: 16px;
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.96)
+      );
+      border-radius: 28px;
+      padding: 32px 22px 30px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -120px;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 60%),
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 65%);
+      opacity: 0.9;
+      z-index: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-green);
+      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.25);
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 3.1vw, 32px);
+      line-height: 1.1;
+      margin: 0 0 12px;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 6px;
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 560px;
+    }
+
+    .hero-line {
+      margin: 0 0 22px;
+      font-size: 14px;
+      color: #e5e7eb;
+    }
+
+    .hero-line strong {
+      color: #f9fafb;
     }
 
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      gap: 12px;
+      padding: 11px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.13s ease-out, box-shadow 0.13s ease-out,
+        background 0.13s ease-out, border-color 0.13s ease-out,
+        color 0.13s ease-out;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent), #4f46e5);
-      border: none;
+      background: linear-gradient(135deg, var(--accent), #2563eb);
       color: white;
-      padding: 12px 24px;
-      border-radius: 999px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 16px 35px rgba(37, 99, 235, 0.6);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      box-shadow: 0 18px 38px rgba(37, 99, 235, 0.55);
     }
 
     .btn-secondary {
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-main);
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    .btn-secondary .dot {
+      width: 7px;
+      height: 7px;
       border-radius: 999px;
-      padding: 11px 18px;
-      font-size: 14px;
-      border: 1px solid var(--border-subtle);
-      background: rgba(15, 23, 42, 0.8);
+      margin-right: 7px;
+      background: var(--accent-soft);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+    }
+
+    .hero-note {
+      margin-top: 6px;
+      font-size: 11px;
       color: var(--text-muted);
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .btn-secondary span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent);
-    }
-
-    /* Sections grid */
     .grid {
+      margin-top: 24px;
       display: grid;
-      grid-template-columns: 1.4fr 1.1fr;
-      gap: 16px;
-      margin-bottom: 16px;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 18px;
     }
 
     .card {
-      background: rgba(15, 23, 42, 0.95);
-      border-radius: 18px;
-      padding: 20px 18px;
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: 22px;
+      padding: 18px 18px 16px;
       border: 1px solid var(--border-subtle);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
     }
 
-    .card h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
+    h2 {
+      margin-top: 0;
+      margin-bottom: 6px;
+      font-size: 17px;
     }
 
     .card p {
-      margin: 0 0 12px;
-      font-size: 14px;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
     .steps {
       list-style: none;
       padding: 0;
-      margin: 8px 0 0;
+      margin: 10px 0 0;
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .step {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 8px;
-      align-items: start;
+      gap: 8px 12px;
+      align-items: flex-start;
+      font-size: 13px;
     }
 
     .step-badge {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 13px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      font-size: 12px;
       font-weight: 600;
+      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.9);
     }
 
     .step-title {
-      font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
+      margin-bottom: 2px;
     }
 
     .step-text {
-      font-size: 13px;
+      grid-column: 2 / 3;
       color: var(--text-muted);
+      font-size: 12px;
     }
 
-    .list {
+    .reasons-list {
       list-style: none;
       padding: 0;
-      margin: 8px 0 0;
+      margin: 12px 0 0;
       display: grid;
-      gap: 6px;
+      gap: 7px;
       font-size: 13px;
       color: var(--text-muted);
     }
 
-    .list li::before {
-      content: "• ";
-      color: var(--accent);
+    .reasons-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
     }
 
-    /* Footer */
+    .reason-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #bbf7d0;
+      margin-top: 1px;
+    }
+
+    /* Features section */
+
+    .features {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: radial-gradient(circle at top left,
+          rgba(59, 130, 246, 0.09),
+          rgba(15, 23, 42, 0.98));
+      border-radius: 18px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 13px;
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.8);
+    }
+
+    .feature-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .feature-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
     footer {
-      margin-top: 12px;
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
       font-size: 12px;
       color: var(--text-muted);
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      gap: 8px;
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 10px;
+      gap: 10px;
+      align-items: center;
     }
 
     footer a {
-      color: #93c5fd;
+      color: #c4d3ff;
       text-decoration: none;
     }
 
@@ -276,154 +388,227 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 768px) {
       body {
-        padding: 20px 12px;
+        padding: 20px 12px 28px;
       }
 
-      .hero-card {
-        padding: 24px 18px;
-      }
-
-      .hero-title {
-        font-size: 26px;
+      .hero {
+        padding: 26px 18px 24px;
       }
 
       .grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
 
-      .nav {
+      .features {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-actions {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        align-items: stretch;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero-subtitle,
+      .hero-line {
+        text-align: left;
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="page">
-    <header class="nav">
-      <div class="logo">
-        <div class="logo-mark">S</div>
-        <span>SNAPI PRO</span>
+  <div class="page-wrapper">
+    <header>
+      <div class="logo-pill">
+        <span class="logo-dot"></span>
+        <span>SNAPI Technologies LLC</span>
       </div>
-      <div class="badge">Smart call &amp; text handling</div>
+      <div class="brand">SNAPI Pro</div>
     </header>
 
-    <main>
-      <!-- Hero -->
-      <section class="hero-card">
-        <div class="pill">
-          <div class="pill-dot"></div>
-          <span>Your SNAPI Pro line is active: <strong>+1 (833) 987-7099</strong></span>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>Your SNAPI Pro line is active: +1 (833) 987-7099</span>
         </div>
 
-        <h1 class="hero-title">Smart Call &amp; Text Handling for Small Businesses</h1>
+        <h1 class="hero-title">
+          Smart Call &amp; Text Handling for Small Businesses
+        </h1>
+
         <p class="hero-subtitle">
-          SNAPI Pro automatically answers calls, captures voicemails, sends text confirmations,
-          and notifies you instantly so you never miss an important customer.
+          SNAPI Pro automatically answers calls, captures voicemails, sends text
+          confirmations, and notifies you instantly so you never miss an
+          important customer.
         </p>
+
         <p class="hero-line">
-          <strong>Designed for busy owners</strong> who need a simple “always-on” receptionist.
+          <strong>Designed for busy owners</strong> who need a simple
+          “always-on” receptionist.
         </p>
 
         <div class="hero-actions">
           <a href="tel:+18339877099" class="btn-primary">
             Call Your SNAPI Pro Line
           </a>
+
           <a href="#contact" class="btn-secondary">
             <span class="dot"></span>
             Talk about setting this up for you
           </a>
         </div>
-      </section>
 
-      <!-- Content grid -->
-      <section class="grid">
-        <!-- How it works -->
-        <article class="card">
-          <h2>How SNAPI Pro Works</h2>
-          <p>A simple, automated flow that makes sure every caller is heard.</p>
-          <ul class="steps">
-            <li class="step">
-              <div class="step-badge">1</div>
-              <div>
-                <div class="step-title">Customer calls your SNAPI Pro number</div>
-                <div class="step-text">
-                  Your toll-free line greets callers with a friendly message and simple options.
-                </div>
+        <div class="hero-note">
+          This is an early-access system for testing and demos. Ideal for HVAC,
+          real estate, and local service businesses.
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works + Why owners love it -->
+    <section class="grid">
+      <article class="card">
+        <h2>How SNAPI Pro Works</h2>
+        <p>
+          A simple, automated flow that makes sure every caller is heard.
+        </p>
+
+        <ul class="steps">
+          <li class="step">
+            <div class="step-badge">1</div>
+            <div>
+              <div class="step-title">Customer calls your SNAPI Pro number</div>
+              <div class="step-text">
+                Your toll-free line greets callers with a friendly message and
+                simple options.
               </div>
-            </li>
-            <li class="step">
-              <div class="step-badge">2</div>
-              <div>
-                <div class="step-title">SNAPI Pro captures the details</div>
-                <div class="step-text">
-                  The system records their name, reason for calling, and message by voice or text.
-                </div>
+            </div>
+          </li>
+
+          <li class="step">
+            <div class="step-badge">2</div>
+            <div>
+              <div class="step-title">SNAPI Pro captures the details</div>
+              <div class="step-text">
+                The system records their name, reason for calling, and message
+                by voice or text.
               </div>
-            </li>
-            <li class="step">
-              <div class="step-badge">3</div>
-              <div>
-                <div class="step-title">You get notified instantly</div>
-                <div class="step-text">
-                  SNAPI Pro can text or email you a summary, so you can follow up when you’re free.
-                </div>
+            </div>
+          </li>
+
+          <li class="step">
+            <div class="step-badge">3</div>
+            <div>
+              <div class="step-title">You get notified instantly</div>
+              <div class="step-text">
+                SNAPI Pro can text or email you a summary, so you can follow up
+                when you’re free.
               </div>
-            </li>
-          </ul>
-        </article>
+            </div>
+          </li>
+        </ul>
+      </article>
 
-        <!-- Benefits -->
-        <article class="card">
-          <h2>Why Owners Love It</h2>
-          <ul class="list">
-            <li>Never miss another call while you’re with customers or out of the office.</li>
-            <li>Professional, consistent greeting every time.</li>
-            <li>Quick snapshot of who called and why.</li>
-            <li>No complicated menus or apps for your callers.</li>
-            <li>Built to be simple to use and easy to improve over time.</li>
-          </ul>
-        </article>
-      </section>
+      <article class="card">
+        <h2>Why Owners Love It</h2>
+        <p>
+          Built to be simple to use, reliable, and easy to improve over time.
+        </p>
 
-      <!-- Second row -->
-      <section class="grid">
-        <!-- Who it's for -->
-        <article class="card">
-          <h2>Who SNAPI Pro Is For</h2>
-          <p>Perfect for small, service-based businesses, including:</p>
-          <ul class="list">
-            <li>Home services (HVAC, plumbing, electrical, cleaning).</li>
-            <li>Real estate agents and property managers.</li>
-            <li>Health &amp; wellness (massage, coaching, personal training).</li>
-            <li>Any busy owner who can’t always pick up the phone.</li>
-          </ul>
-        </article>
+        <ul class="reasons-list">
+          <li>
+            <span class="reason-icon">✓</span>
+            <span>Never miss another call while you’re with customers or out of the office.</span>
+          </li>
+          <li>
+            <span class="reason-icon">✓</span>
+            <span>Professional, consistent greeting every time someone calls.</span>
+          </li>
+          <li>
+            <span class="reason-icon">✓</span>
+            <span>Quick snapshot of who called, what they needed, and how to call back.</span>
+          </li>
+          <li>
+            <span class="reason-icon">✓</span>
+            <span>No complicated phone menus or apps required for your callers.</span>
+          </li>
+          <li>
+            <span class="reason-icon">✓</span>
+            <span>Great for testing a “virtual receptionist” before hiring full-time staff.</span>
+          </li>
+        </ul>
+      </article>
+    </section>
 
-        <!-- Simple pricing (placeholder) -->
-        <article class="card">
-          <h2>Simple, Transparent Setup</h2>
-          <p>
-            SNAPI Pro is currently in an early access phase. We’re working closely with a small
-            group of business owners to refine the system.
-          </p>
-          <p class="step-text">
-            If you’d like to be considered for early access or talk about pricing, reach out using
-            the contact details below.
-          </p>
-        </article>
-      </section>
-    </main>
+    <!-- Feature highlights -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-label">
+          <span class="pill-dot"></span>
+          Call Handling
+        </div>
+        <div class="feature-title">Always-on answering</div>
+        <p class="feature-text">
+          Greets callers 24/7, captures voicemail details, and keeps your
+          business looking responsive even after hours.
+        </p>
+      </div>
 
+      <div class="feature-card">
+        <div class="feature-label">
+          <span class="pill-dot"></span>
+          Text &amp; Follow-Up
+        </div>
+        <div class="feature-title">Instant confirmations</div>
+        <p class="feature-text">
+          Automatically send a quick “we got your message” text so customers
+          know you’ll follow up shortly.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-label">
+          <span class="pill-dot"></span>
+          Owner Notifications
+        </div>
+        <div class="feature-title">Simple summaries</div>
+        <p class="feature-text">
+          Get a short summary of each call so you can decide who to call back
+          first when you have time.
+        </p>
+      </div>
+    </section>
+
+    <!-- Early access note -->
+    <section class="card" style="margin-top: 18px;">
+      <h2>Early Access &amp; Next Steps</h2>
+      <p>
+        SNAPI Pro is currently in an early access phase. We’re working closely
+        with a small group of business owners to refine the system.
+      </p>
+      <p class="step-text" style="margin-top: 6px; font-size: 12px;">
+        If you’d like to be considered for early access or talk about pricing,
+        reach out using the contact details below.
+      </p>
+    </section>
+
+    <!-- Contact / footer -->
     <footer id="contact">
       <div>
         &copy; <span id="year"></span> SNAPI Technologies LLC. All rights reserved.
       </div>
       <div>
-        Contact: <a href="mailto:support@snapipro.com">support@snapipro.com</a>
+        Contact:
+        <a href="mailto:support@snapipro.com">support@snapipro.com</a>
       </div>
     </footer>
   </div>
